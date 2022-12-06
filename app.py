@@ -17,3 +17,14 @@ with col20:
     st.area_chart(df[['Date','Temperature (F)','Salinity (ppt)']],x="Date")
 
 df
+
+#----------------------Hide Streamlit footer----------------------------
+hide_st_style = """
+
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+
+"""
+st.markdown(hide_st_style, unsafe_allow_html=True)
+#--------------------------------------------------------------------
