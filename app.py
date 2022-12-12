@@ -3,8 +3,7 @@ import pandas as pd
 from datetime import datetime
 import numpy as np
 import plotly.express as px
-from datetime import datetime
-today=datetime.today()
+import datetime as dt
 
 st.set_page_config(layout="centered", page_icon="🐠", page_title="Tank Stats")
 
@@ -28,11 +27,11 @@ symbols = st.multiselect("Fish activity in the tank today", all_symbols, all_sym
 st.plotly_chart(heatmap_fig, use_container_width=True)
 
 #PAGE TABS
-tab1, tab2 = st.tabs(["🧪 Chemistry", "🐡 Biology"])
+tab1, tab2,tab3 = st.tabs(["🧪 Chemistry", "🐡 Biology","🔬 Notes"])
+df1 = pd.read_csv("testing.csv")
 
 with tab1: #CHEMISTRY 
     df = pd.read_csv("testing.csv")
-
     #METRICS
     col1, col2,col3 = st.columns(3)
     with col1:
@@ -53,10 +52,27 @@ with tab1: #CHEMISTRY
         df[['Date','Temp (F)','pH','Salt (ppm)']]
 
 with tab2: #BIOLOGY
+   df = pd.read_csv("creatures.csv")
+   df['date'] = pd.to_datetime(df['date'], errors='coerce')
+   now = pd.to_datetime('now')
+   df['age'] = df.apply(lambda x: round(((now - x['date']).total_seconds() / (60*60*24)),1), axis=1)
+   df['age_str'] = df.apply(lambda x: str(x['age']) +" days", axis=1)
+
+   #BAR
+   fig2= px.bar(df,y='species',x='number',barmode="stack",orientation='h',color_continuous_scale='viridis',title="Creatures in the Tank",color='category',text="age_str")
+   fig2.update_layout({
+    'plot_bgcolor': 'rgba(0,0,0,0)',
+    'paper_bgcolor': 'rgba(0,0,0,0)'
+   })
+#    fig2.update_layout(showlegend=False)
+   fig2.update_xaxes(visible=False)    
+#    fig2.update_yaxes(visible=False)
+   fig2.update(layout_coloraxis_showscale=False)
+   st.plotly_chart(fig2)
+
    #TREEMAP
-   d = {'num': [1,4, 2], 'species': ['conch', 'algae crab', 'clownfish'], 'category': ['cleanup crew','cleanup crew','fish'],'date':['12/10','12/17','12/12'],'age':[3,4,1]}
-   df = pd.DataFrame(data=d)
-   fig = px.treemap(df, path=[px.Constant("Tank"), 'category', 'species'], title="Current Creatures in the Tank",values='num', color='age', color_continuous_scale='aggrnyl',color_continuous_midpoint=np.average(df['age'], weights=df['num']))
+   fig = px.treemap(df, path=[px.Constant("Tank"), 'category', 'species','batch'], values='number', color='age',custom_data=['age','number'],color_continuous_scale='viridis',color_continuous_midpoint=np.average(df['age'], weights=df['number']))
+#    fig.data[0].textinfo = 'parent+percent'
    fig.update_layout(margin = dict(t=50, l=25, r=25, b=25))
    fig.update_layout({
     'plot_bgcolor': 'rgba(0,0,0,0)',
@@ -64,3 +80,13 @@ with tab2: #BIOLOGY
    })
    st.plotly_chart(fig, use_container_width=True)
 
+with tab3: #NOTES
+    st.header("Raw Data")
+    st.caption("Data and chart dump from other page")
+    df1
+    st.header("Things to Know")
+    st.caption("Notes and Useful Links")
+
+#things left
+#automate the chemical metrics update from df
+#add notes page to input data and see crazy stuff
