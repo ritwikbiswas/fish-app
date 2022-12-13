@@ -22,7 +22,7 @@ heatmap_fig.update_xaxes(visible=False)
 heatmap_fig.update_yaxes(visible=False)
 heatmap_fig.update(layout_coloraxis_showscale=False)
 
-all_symbols = ["Clownfish","Conch","Algae Crab"]
+all_symbols = ["Clownfish","Conch","AlgaeCrab"]
 symbols = st.multiselect("(COMING SOON) Fish activity in the tank today", all_symbols, all_symbols[:3])
 st.plotly_chart(heatmap_fig, use_container_width=True)
 
