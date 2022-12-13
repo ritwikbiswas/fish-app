@@ -22,8 +22,8 @@ heatmap_fig.update_xaxes(visible=False)
 heatmap_fig.update_yaxes(visible=False)
 heatmap_fig.update(layout_coloraxis_showscale=False)
 
-all_symbols = ["Clownfish","Other Fish"]
-symbols = st.multiselect("Fish activity in the tank today", all_symbols, all_symbols[:3])
+all_symbols = ["Clownfish","Conch","Algae Crab"]
+symbols = st.multiselect("(COMING SOON) Fish activity in the tank today", all_symbols, all_symbols[:3])
 st.plotly_chart(heatmap_fig, use_container_width=True)
 
 #PAGE TABS
@@ -35,11 +35,11 @@ with tab1: #CHEMISTRY
     #METRICS
     col1, col2,col3 = st.columns(3)
     with col1:
-        st.metric(label="Ammonia", value="0.75 ppm", delta="0")
+        st.metric(label="Ammonia", value="0.15 ppm", delta="-2.75")
     with col2:
-        st.metric(label="pH", value="8.9", delta="0.8")
+        st.metric(label="pH", value="8.1", delta="-0.8")
     with col3:
-        st.metric(label="Salinity", value="1.027 ppm", delta="-.002")
+        st.metric(label="Salinity", value="1.029 ppm", delta=".002")
     st.text("")
     st.text("")
     st.text("")
